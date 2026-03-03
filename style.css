@@ -469,7 +469,7 @@ footer{
 }
 summary::marker{
 color: var(--negro);
-font-size: 3vw;
+font-size: 2vw;
 }
 .seccion{
 width: 100%;
@@ -482,7 +482,7 @@ flex-direction: column;
 gap: 2vw;
 }
 .titpeq{
-font-size: 5vw ;
+font-size: 3vw ;
 font-family: var(--yanone);
 color: var(--negro);
 width: 100%;
@@ -494,7 +494,7 @@ justify-content: center;
 align-items: center;
 flex-direction: row;
 flex-wrap: wrap;
-gap: 6vw 4vw;
+gap: 3vw 2vw;
 }
 .contarticulo{
 width: auto;
@@ -505,7 +505,7 @@ align-items: center;
 flex-direction: column;
 }
 .nombart{
-font-size: 3vw;
+font-size: 2vw;
 font-family: var(--roboto);
 color: var(--negro);
 font-weight:bolder;
@@ -520,7 +520,7 @@ background-color: var(--azul);
 font-family: var(--roboto);
 color: var(--blanco);
 border-radius: 1vw;
-padding: 0.8vw ;
+padding: 0.6vw ;
 text-align: center;
 }
 
@@ -558,7 +558,7 @@ flex-direction: column;
 gap: 2vw;
 }
 .liscomptit{
-font-size: 5vw ;
+font-size: 3vw ;
 font-family: var(--yanone);
 color: var(--negro);
 width: 100%;
@@ -580,8 +580,8 @@ flex-direction: row;
 gap: 2vw;
 }
 .inpcheck { 
-width: 4vw;
-height: 4vw;
+width: 2.5vw;
+height: 2.5vw;
 border: 8px solid var(--naranja) !important;
 appearance: none; /* Elimina el estilo por defecto del navegador */
 -webkit-appearance: none; 
@@ -596,14 +596,14 @@ margin: none;
 content: '✔'; 
 color: var(--verde); 
 font-weight: bold;
-font-size: 5vw;
+font-size:3vw;
 position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 }
 .nmbrecheck{
-font-size: 4vw;
+font-size: 2.5vw;
 font-family: var(--roboto);
 color: var(--negro);
 font-weight:bold;            
@@ -624,14 +624,14 @@ flex-direction: column;
 gap: 1vw;
 }
 .inpagrmas{
-width: 80%;
+width: 70%;
 padding: 1vw;
 border: none;
 border-bottom: 2px solid var(--naranja);
 outline: none;
 color: var(--negro);
 font-family: var(--roboto);
-font-size: 2vw;
+font-size: 1.5vw;
 text-align: center;
 transition: all 0.1s;
 }
@@ -642,14 +642,14 @@ transition: all 0.1s;
 font-family: var(--roboto);
 color: var(--gris1);
 text-align: center;
-font-size: 2vw;
+font-size: 1.5vw;
 }
 .btnc{
-width:7vw ;
-font-size:1.5vw ;
+width:5vw ;
+font-size:1vw ;
 }
 .btnlc{
-    font-size:1.5vw ;
+    font-size:1vw ;
     width: auto;
 }
 .btnc,.btnlc:hover{
