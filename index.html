@@ -4,628 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MarketList</title>
-  <link rel="icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-  <style>
-/* ── RESET ───────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { height: 100%; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: #F0ECE3;
-  color: #1A1A18;
-  min-height: 100%;
-  -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
-}
-
-/* ── TOKENS ──────────────────────────────── */
-:root {
-  --bg:        #F0ECE3;
-  --surface:   #FFFFFF;
-  --primary:   #2B5329;
-  --primary-h: #3D7039;
-  --primary-a: rgba(43,83,41,0.09);
-  --accent:    #E05A18;
-  --success:   #4A9648;
-  --danger:    #D63B2B;
-  --text:      #1A1A18;
-  --text2:     #6A6560;
-  --muted:     #ABA59D;
-  --border:    #E1DAD1;
-  --sh:        0 2px 14px rgba(43,83,41,0.07);
-  --sh-lg:     0 8px 36px rgba(43,83,41,0.12);
-  --r:         20px;
-  --r-sm:      13px;
-  --r-pill:    100px;
-}
-
-/* ── APP ─────────────────────────────────── */
-.app {
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── HEADER ──────────────────────────────── */
-.header {
-  background: var(--primary);
-  background-image:
-    radial-gradient(ellipse at 15% 60%, rgba(255,255,255,0.05) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 20%, rgba(255,255,255,0.07) 0%, transparent 45%);
-  padding: 18px 20px 16px;
-  padding-top: calc(18px + env(safe-area-inset-top));
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo { display: flex; align-items: baseline; gap: 9px; }
-.logo-icon { font-size: 21px; line-height: 1; }
-.logo-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 27px;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: -0.5px;
-}
-.header-date {
-  font-size: 12px;
-  color: rgba(255,255,255,0.45);
-  font-weight: 400;
-  letter-spacing: 0.05em;
-}
-
-/* ── MAIN ────────────────────────────────── */
-.main {
-  flex: 1;
-  padding: 22px 16px 110px;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-/* ── SECTION LABEL ───────────────────────── */
-.slabel {
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-
-/* ── ACCORDIONS ──────────────────────────── */
-.accordions { display: flex; flex-direction: column; gap: 8px; }
-
-.accordion {
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  box-shadow: var(--sh);
-  overflow: hidden;
-}
-
-.acc-btn {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 15px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.acc-emoji { font-size: 17px; flex-shrink: 0; }
-
-.acc-title {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  text-align: left;
-}
-
-.acc-badge {
-  font-size: 11.5px;
-  font-weight: 700;
-  padding: 2px 9px;
-  border-radius: var(--r-pill);
-  background: var(--primary-a);
-  color: var(--primary);
-  min-width: 26px;
-  text-align: center;
-  transition: background 0.2s;
-}
-
-.acc-chevron {
-  color: var(--muted);
-  transition: transform 0.32s ease;
-  flex-shrink: 0;
-}
-
-.accordion.open .acc-chevron { transform: rotate(180deg); }
-
-.acc-panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.36s ease;
-}
-.accordion.open .acc-panel { max-height: 800px; }
-
-.acc-inner { border-top: 1px solid var(--border); }
-
-.items-wrap {
-  padding: 12px 14px 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-height: 52px;
-}
-
-.items-hint {
-  width: 100%;
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 2px;
-}
-
-.items-empty {
-  font-size: 13px;
-  color: var(--muted);
-  font-style: italic;
-}
-
-/* ── CHIPS ───────────────────────────────── */
-.chip {
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  border-radius: var(--r-pill);
-  padding: 7px 14px;
-  font-size: 13.5px;
-  font-weight: 500;
-  font-family: inherit;
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: background 0.14s, border-color 0.14s, transform 0.1s;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-.chip-check { font-size: 11px; opacity: 0; color: #fff; transition: opacity 0.18s; }
-
-.chip.adding {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-  transform: scale(0.92);
-}
-.chip.adding .chip-check { opacity: 1; }
-
-/* ── ADD SAVED BTN ───────────────────────── */
-.btn-add-saved {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 16px;
-  background: none;
-  border: none;
-  border-top: 1px solid var(--border);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--primary);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.14s;
-}
-.btn-add-saved:active { background: var(--bg); }
-.btn-add-saved-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--primary-a);
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  line-height: 1;
-  font-weight: 300;
-}
-
-/* ── DIVIDER ─────────────────────────────── */
-.divider { height: 1px; background: var(--border); }
-
-/* ── LIST SECTION ────────────────────────── */
-.list-section { display: flex; flex-direction: column; gap: 14px; }
-
-.list-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.list-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.1;
-}
-
-.list-sub {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 3px;
-  min-height: 18px;
-  transition: color 0.3s;
-}
-.list-sub.all-done { color: var(--success); font-weight: 600; }
-
-.top-actions { display: flex; gap: 7px; padding-top: 6px; }
-
-.btn-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text2);
-  box-shadow: var(--sh);
-  transition: all 0.14s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-icon:active { transform: scale(0.88); }
-.btn-icon.danger:active { background: #FFF0EE; border-color: var(--danger); color: var(--danger); }
-
-/* ── PROGRESS ────────────────────────────── */
-.progress-track {
-  height: 6px;
-  background: var(--border);
-  border-radius: var(--r-pill);
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  border-radius: var(--r-pill);
-  background: linear-gradient(90deg, var(--success), #6AC468);
-  transition: width 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
-  width: 0%;
-}
-
-/* ── LIST ITEMS ──────────────────────────── */
-.list-items { display: flex; flex-direction: column; gap: 4px; }
-
-/* Empty state */
-.empty-state {
-  padding: 48px 20px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.empty-icon { font-size: 52px; opacity: 0.2; filter: grayscale(1); }
-.empty-title { font-size: 16px; font-weight: 600; color: var(--text2); }
-.empty-desc { font-size: 13px; color: var(--muted); line-height: 1.55; max-width: 210px; }
-
-/* List item */
-.list-item {
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  padding: 13px 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: var(--sh);
-  position: relative;
-  overflow: hidden;
-  animation: slideIn 0.2s ease;
-  touch-action: pan-y;
-  transition: transform 0.18s ease, opacity 0.18s ease;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-7px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.list-item.removing {
-  transform: translateX(-110%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Circle check */
-.item-check {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
-.list-item.done .item-check {
-  background: var(--success);
-  border-color: var(--success);
-}
-.check-tick {
-  opacity: 0;
-  transform: scale(0.3);
-  transition: all 0.2s ease;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
-}
-.list-item.done .check-tick { opacity: 1; transform: scale(1); }
-
-/* Item name */
-.item-name {
-  flex: 1;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text);
-  line-height: 1.3;
-  transition: color 0.2s;
-}
-.list-item.done .item-name {
-  color: var(--muted);
-  text-decoration: line-through;
-  text-decoration-color: var(--muted);
-}
-
-/* Delete button */
-.item-del {
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 15px;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.14s, background 0.14s;
-  flex-shrink: 0;
-  line-height: 1;
-  -webkit-tap-highlight-color: transparent;
-}
-.item-del:active { color: var(--danger); background: #FFF0EE; }
-
-/* Swipe hint stripe */
-.list-item::before {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--danger);
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.list-item.swiping::before { opacity: 0.5; }
-
-/* ── ADD BAR ─────────────────────────────── */
-.add-bar {
-  display: flex;
-  align-items: center;
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  padding: 4px 4px 4px 16px;
-  box-shadow: var(--sh);
-}
-.add-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  font-size: 16px;
-  color: var(--text);
-  background: transparent;
-  padding: 11px 0;
-  caret-color: var(--primary);
-}
-.add-input::placeholder { color: var(--muted); }
-.add-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: var(--r-sm);
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  font-size: 28px;
-  font-weight: 300;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.14s, transform 0.1s;
-  flex-shrink: 0;
-  padding-bottom: 3px;
-  -webkit-tap-highlight-color: transparent;
-}
-.add-btn:active { background: var(--primary-h); transform: scale(0.92); }
-
-/* ── MODALS ──────────────────────────────── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(18,18,14,0.46);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.24s ease;
-}
-.modal-overlay.active { opacity: 1; pointer-events: all; }
-
-.modal-sheet {
-  background: var(--surface);
-  border-radius: var(--r) var(--r) 0 0;
-  padding: 10px 24px calc(30px + env(safe-area-inset-bottom));
-  width: 100%;
-  max-width: 480px;
-  transform: translateY(100%);
-  transition: transform 0.32s cubic-bezier(0.34, 1.15, 0.64, 1);
-}
-.modal-overlay.active .modal-sheet { transform: translateY(0); }
-
-.modal-handle {
-  width: 38px;
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  margin: 0 auto 20px;
-}
-.modal-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 18px;
-}
-.modal-icon { font-size: 40px; margin-bottom: 6px; display: block; }
-.modal-desc { font-size: 14px; color: var(--text2); line-height: 1.55; margin-bottom: 24px; }
-
-.modal-input {
-  width: 100%;
-  border: none;
-  border-bottom: 2.5px solid var(--border);
-  padding: 10px 0;
-  font-family: inherit;
-  font-size: 20px;
-  color: var(--text);
-  outline: none;
-  background: transparent;
-  margin-bottom: 26px;
-  caret-color: var(--primary);
-  transition: border-color 0.2s;
-}
-.modal-input:focus { border-bottom-color: var(--primary); }
-
-.modal-actions { display: flex; gap: 10px; }
-
-.btn-m {
-  flex: 1;
-  padding: 15px 10px;
-  border-radius: var(--r-sm);
-  border: none;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.13s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-m.primary { background: var(--primary); color: #fff; }
-.btn-m.primary:active { background: var(--primary-h); }
-.btn-m.secondary { background: var(--bg); color: var(--text); }
-.btn-m.secondary:active { background: var(--border); }
-.btn-m.danger { background: #FFF0EE; color: var(--danger); }
-.btn-m.danger:active { background: #FFE0DC; }
-
-/* ── TOAST ───────────────────────────────── */
-.toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateY(68px);
-  background: #1A1A18;
-  color: #fff;
-  padding: 11px 22px;
-  border-radius: var(--r-pill);
-  font-size: 14px;
-  font-weight: 500;
-  opacity: 0;
-  z-index: 200;
-  white-space: nowrap;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
-  max-width: calc(100vw - 40px);
-  text-align: center;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* ── CELEBRATION ─────────────────────────── */
-.celebration {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.celebrate-emoji {
-  font-size: 72px;
-  animation: pop 0.9s ease forwards;
-}
-@keyframes pop {
-  0%   { opacity: 0; transform: scale(0.3) rotate(-15deg); }
-  50%  { opacity: 1; transform: scale(1.5) rotate(5deg); }
-  80%  { opacity: 1; transform: scale(1.1) rotate(-2deg); }
-  100% { opacity: 0; transform: scale(1.2); }
-}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
 
-  <!-- Toast -->
+  <!-- ── Toast ── -->
   <div class="toast" id="toast"></div>
 
-  <!-- Header -->
+  <!-- ── Drawer (menú hamburguesa) ── -->
+  <div class="drawer-overlay" id="drawerOverlay">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <nav class="drawer" id="drawer">
+      <div class="drawer-header">
+        <span class="drawer-title">Mis listas</span>
+        <button class="drawer-close" id="drawerClose" aria-label="Cerrar menú">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4 4L14 14M4 14L14 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-lists" id="drawerLists">
+        <!-- Generado por JS -->
+      </div>
+      <div class="drawer-footer">
+        <button class="btn-create-list" id="btnCreateList">
+          <span class="create-plus">+</span>
+          Crear lista
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ── Header ── -->
   <header class="header">
-    <div class="logo">
-      <span class="logo-icon">🛒</span>
-      <span class="logo-text">MarketList</span>
+    <button class="btn-hamburger" id="btnHamburger" aria-label="Abrir menú">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="header-center">
+      <span class="header-emoji" id="headerEmoji">🛒</span>
+      <span class="header-title" id="headerTitle">Lista del super</span>
     </div>
     <span class="header-date" id="headerDate"></span>
   </header>
 
-  <!-- Main -->
+  <!-- ── Main ── -->
   <main class="main">
 
-    <!-- ── Saved products ── -->
-    <div>
+    <!-- Sección productos guardados (solo lista predeterminada) -->
+    <div class="saved-section" id="savedSection">
       <div class="slabel">Mis productos</div>
       <div class="accordions">
 
-        <!-- Accordion 1 -->
+        <!-- Accordion Recurrentes -->
         <div class="accordion" id="acc1">
           <button class="acc-btn" aria-expanded="false">
             <span class="acc-emoji">🔄</span>
@@ -648,7 +84,7 @@ body {
           </div>
         </div>
 
-        <!-- Accordion 2 -->
+        <!-- Accordion Variables -->
         <div class="accordion" id="acc2">
           <button class="acc-btn" aria-expanded="false">
             <span class="acc-emoji">🔀</span>
@@ -674,32 +110,34 @@ body {
       </div>
     </div>
 
-    <!-- Divider -->
-    <div class="divider"></div>
+    <div class="divider" id="mainDivider"></div>
 
-    <!-- ── Shopping list ── -->
+    <!-- ── Lista de compras ── -->
     <div class="list-section">
 
       <div class="list-top">
-        <div>
-          <div class="list-title">Lista del super</div>
+        <div class="list-top-left">
+          <div class="list-title" id="listTitle">Lista del super</div>
           <div class="list-sub" id="listSub">Empieza añadiendo productos</div>
         </div>
         <div class="top-actions">
           <button class="btn-icon" id="btnCopy" title="Copiar lista">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
             </svg>
           </button>
-          <button class="btn-icon danger" id="btnClear" title="Terminar lista">
+          <button class="btn-icon danger" id="btnClear" title="Limpiar lista">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
             </svg>
           </button>
         </div>
       </div>
 
-      <!-- Progress -->
+      <!-- Barra de progreso -->
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
       </div>
@@ -707,511 +145,100 @@ body {
       <!-- Items -->
       <div class="list-items" id="listaCompl">
         <div class="empty-state" id="emptyState">
-          <span class="empty-icon">🛒</span>
+          <span class="empty-icon" id="emptyIcon">🛒</span>
           <div class="empty-title">Lista vacía</div>
-          <div class="empty-desc">Agrega productos de tus listas guardadas o escríbelos abajo</div>
+          <div class="empty-desc" id="emptyDesc">Agrega productos de tus listas guardadas o escríbelos abajo</div>
         </div>
       </div>
 
-      <!-- Add inline -->
+      <!-- Input añadir -->
       <div class="add-bar">
-        <input type="text" id="inptagrmas" class="add-input" placeholder="Añadir elemento..." autocomplete="off" autocorrect="off" spellcheck="false">
+        <input type="text" id="inptagrmas" class="add-input"
+          placeholder="Añadir elemento..."
+          autocomplete="off" autocorrect="off" spellcheck="false">
         <button class="add-btn" id="btnagrmasinpt">+</button>
       </div>
 
     </div>
   </main>
 
-  <!-- ── MODALS ── -->
+  <!-- ══════════════ MODALS ══════════════ -->
 
-  <!-- Add saved item -->
+  <!-- Modal: añadir producto guardado -->
   <div class="modal-overlay" id="modalAgregar">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Añadir producto</div>
-      <input type="text" class="modal-input" id="inputAgregar" placeholder="Nombre del producto" autocomplete="off">
+      <input type="text" class="modal-input" id="inputAgregar"
+        placeholder="Nombre del producto" autocomplete="off">
       <div class="modal-actions">
         <button class="btn-m secondary" id="cancelAgregar">Cancelar</button>
-        <button class="btn-m primary" id="guardarElem">Guardar</button>
+        <button class="btn-m primary"   id="guardarElem">Guardar</button>
       </div>
     </div>
   </div>
 
-  <!-- Edit saved item -->
+  <!-- Modal: editar producto guardado -->
   <div class="modal-overlay" id="modalEditar">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Editar producto</div>
-      <input type="text" class="modal-input" id="inputEditar" placeholder="Nombre del producto" autocomplete="off">
+      <input type="text" class="modal-input" id="inputEditar"
+        placeholder="Nombre del producto" autocomplete="off">
       <div class="modal-actions">
-        <button class="btn-m danger" id="eliminarEdicion">Eliminar</button>
+        <button class="btn-m danger"  id="eliminarEdicion">Eliminar</button>
         <button class="btn-m primary" id="guardarEdicion">Guardar</button>
       </div>
     </div>
   </div>
 
-  <!-- Confirm clear -->
+  <!-- Modal: confirmar limpiar lista -->
   <div class="modal-overlay" id="modalConfirm">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <span class="modal-icon">🛍️</span>
       <div class="modal-title">¿Lista terminada?</div>
-      <div class="modal-desc">Se limpiará la lista actual. Tus productos guardados en secciones no se verán afectados.</div>
+      <div class="modal-desc">Se limpiará la lista actual. Tus productos guardados no se verán afectados.</div>
       <div class="modal-actions">
         <button class="btn-m secondary" id="cancelClear">Cancelar</button>
-        <button class="btn-m danger" id="confirmClear">Sí, terminar</button>
+        <button class="btn-m danger"    id="confirmClear">Sí, terminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: crear nueva lista -->
+  <div class="modal-overlay" id="modalCreateList">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Nueva lista</div>
+      <div class="emoji-picker" id="emojiPicker">
+        <!-- Generado por JS -->
+      </div>
+      <input type="text" class="modal-input" id="inputListName"
+        placeholder="Nombre de la lista" autocomplete="off">
+      <div class="modal-actions">
+        <button class="btn-m secondary" id="cancelCreateList">Cancelar</button>
+        <button class="btn-m primary"   id="confirmCreateList">Crear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: confirmar eliminar lista -->
+  <div class="modal-overlay" id="modalDeleteList">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <span class="modal-icon">🗑️</span>
+      <div class="modal-title">¿Eliminar lista?</div>
+      <div class="modal-desc" id="deleteListDesc">Esta acción no se puede deshacer.</div>
+      <div class="modal-actions">
+        <button class="btn-m secondary" id="cancelDeleteList">Cancelar</button>
+        <button class="btn-m danger"    id="confirmDeleteList">Eliminar</button>
       </div>
     </div>
   </div>
 
 </div><!-- /app -->
 
-<script>
-/* ── Service Worker ────────────────────── */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(r => console.log('SW registrado', r))
-    .catch(e => console.error('SW error', e));
-}
-
-/* ── DATE IN HEADER ────────────────────── */
-(function() {
-  const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  const d = new Date();
-  document.getElementById('headerDate').textContent =
-    `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
-})();
-
-/* ── STATE ─────────────────────────────── */
-let seccionActiva      = '';
-let contenedorActivo   = '';
-let badgeActivo        = '';
-let elementoEditando   = null;
-let valorEditando      = '';
-
-/* ── UTILS ─────────────────────────────── */
-function toast(msg, ms = 2300) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), ms);
-}
-
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-/* ── LOCAL STORAGE ─────────────────────── */
-function getLS(key) { return JSON.parse(localStorage.getItem(key)) || []; }
-function setLS(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
-
-function addLS(key, val) {
-  const arr = getLS(key);
-  if (!arr.includes(val)) { arr.push(val); setLS(key, arr); }
-}
-function removeLS(key, val) { setLS(key, getLS(key).filter(v => v !== val)); }
-function editLS(key, oldVal, newVal) {
-  const arr = getLS(key);
-  const i = arr.indexOf(oldVal);
-  if (i !== -1) { arr[i] = newVal; setLS(key, arr); }
-}
-
-/* ── BADGES ────────────────────────────── */
-function updateBadge(seccion, badgeId) {
-  const el = document.getElementById(badgeId);
-  if (el) el.textContent = getLS(seccion).length;
-}
-
-/* ── PROGRESS ──────────────────────────── */
-function updateProgress() {
-  const all   = document.querySelectorAll('#listaCompl .list-item');
-  const done  = document.querySelectorAll('#listaCompl .list-item.done');
-  const total = all.length;
-  const doneN = done.length;
-  const fill  = document.getElementById('progressFill');
-  const sub   = document.getElementById('listSub');
-  const empty = document.getElementById('emptyState');
-
-  if (total === 0) {
-    fill.style.width = '0%';
-    sub.textContent = 'Empieza añadiendo productos';
-    sub.classList.remove('all-done');
-    if (empty) empty.style.display = 'flex';
-  } else {
-    if (empty) empty.style.display = 'none';
-    const pct = Math.round((doneN / total) * 100);
-    fill.style.width = pct + '%';
-    if (doneN === total && total > 0) {
-      sub.textContent = `¡Todo listo! ${total} producto${total !== 1 ? 's' : ''}`;
-      sub.classList.add('all-done');
-      celebrate();
-    } else {
-      sub.textContent = `${doneN} de ${total} producto${total !== 1 ? 's' : ''}`;
-      sub.classList.remove('all-done');
-    }
-  }
-}
-
-function celebrate() {
-  // Only celebrate once (not on load)
-  if (celebrate._busy) return;
-  celebrate._busy = true;
-  setTimeout(() => { celebrate._busy = false; }, 1100);
-  const el = document.createElement('div');
-  el.className = 'celebration';
-  el.innerHTML = '<div class="celebrate-emoji">🎉</div>';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
-}
-
-/* ── ACCORDIONS ────────────────────────── */
-function setupAccordion(accId) {
-  const acc = document.getElementById(accId);
-  const btn = acc.querySelector('.acc-btn');
-  btn.addEventListener('click', () => {
-    const open = acc.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open);
-  });
-}
-
-/* ── CHIPS ─────────────────────────────── */
-function createChip(seccion, contenedorId, badgeId, valor) {
-  const chip = document.createElement('div');
-  chip.className = 'chip';
-  chip.dataset.valor = valor;
-  chip.tabIndex = 0;
-
-  const txt = document.createTextNode(valor);
-  const ck  = document.createElement('span');
-  ck.className = 'chip-check';
-  ck.textContent = '✓';
-  chip.appendChild(txt);
-  chip.appendChild(ck);
-
-  // Long press = edit, short tap = add to list
-  let pressTimer, isLong = false, moved = false;
-
-  chip.addEventListener('touchstart', () => {
-    isLong = false; moved = false;
-    pressTimer = setTimeout(() => {
-      isLong = true;
-      openEditModal(seccion, chip, chip.dataset.valor);
-    }, 520);
-  }, { passive: true });
-
-  chip.addEventListener('touchmove', () => {
-    moved = true; clearTimeout(pressTimer);
-  }, { passive: true });
-
-  chip.addEventListener('touchend', (e) => {
-    clearTimeout(pressTimer);
-    if (!isLong && !moved) {
-      e.preventDefault();
-      tapChip(chip);
-    }
-  });
-
-  // Desktop
-  chip.addEventListener('click', () => tapChip(chip));
-  chip.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    openEditModal(seccion, chip, chip.dataset.valor);
-  });
-  chip.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') tapChip(chip);
-    if (e.key === 'Delete') openEditModal(seccion, chip, chip.dataset.valor);
-  });
-
-  return chip;
-}
-
-function tapChip(chip) {
-  chip.classList.add('adding');
-  setTimeout(() => chip.classList.remove('adding'), 480);
-  agregarALista(chip.dataset.valor);
-}
-
-function loadSaved(seccion, contenedorId, badgeId) {
-  const wrap = document.getElementById(contenedorId);
-  if (!wrap) return;
-  const arr = getLS(seccion);
-
-  // Remove old chips and empty messages (keep hint)
-  wrap.querySelectorAll('.chip, .items-empty').forEach(el => el.remove());
-
-  if (arr.length === 0) {
-    const em = document.createElement('span');
-    em.className = 'items-empty';
-    em.textContent = 'Sin productos guardados';
-    wrap.appendChild(em);
-  } else {
-    arr.forEach(v => wrap.appendChild(createChip(seccion, contenedorId, badgeId, v)));
-  }
-  updateBadge(seccion, badgeId);
-}
-
-function appendChip(seccion, contenedorId, badgeId, valor) {
-  const wrap = document.getElementById(contenedorId);
-  if (!wrap) return;
-  wrap.querySelector('.items-empty')?.remove();
-  wrap.appendChild(createChip(seccion, contenedorId, badgeId, valor));
-  updateBadge(seccion, badgeId);
-}
-
-/* ── MODAL: ADD SAVED ──────────────────── */
-[['agrm1','comprasRecurrentes1','articulos1','badge1'],
- ['agrm2','comprasRecurrentes2','articulos2','badge2']].forEach(([btnId, sec, cont, badge]) => {
-  document.getElementById(btnId).addEventListener('click', () => {
-    seccionActiva = sec; contenedorActivo = cont; badgeActivo = badge;
-    const inp = document.getElementById('inputAgregar');
-    inp.value = '';
-    openModal('modalAgregar');
-    setTimeout(() => inp.focus(), 340);
-  });
-});
-
-document.getElementById('cancelAgregar').addEventListener('click', () => closeModal('modalAgregar'));
-
-document.getElementById('guardarElem').addEventListener('click', () => {
-  const inp = document.getElementById('inputAgregar');
-  const val = inp.value.trim();
-  if (!val) return;
-  if (getLS(seccionActiva).includes(val)) { toast(`"${val}" ya existe`); return; }
-
-  appendChip(seccionActiva, contenedorActivo, badgeActivo, val);
-  addLS(seccionActiva, val);
-  inp.value = '';
-  closeModal('modalAgregar');
-  toast(`"${val}" guardado ✓`);
-});
-
-document.getElementById('inputAgregar').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('guardarElem').click();
-});
-
-/* ── MODAL: EDIT SAVED ─────────────────── */
-function openEditModal(seccion, chip, valor) {
-  seccionActiva    = seccion;
-  elementoEditando = chip;
-  valorEditando    = valor;
-  const inp = document.getElementById('inputEditar');
-  inp.value = valor;
-  openModal('modalEditar');
-  setTimeout(() => inp.focus(), 340);
-}
-
-document.getElementById('guardarEdicion').addEventListener('click', () => {
-  const inp    = document.getElementById('inputEditar');
-  const newVal = inp.value.trim();
-  if (!newVal || !elementoEditando) return;
-
-  // Update DOM chip (text node is firstChild)
-  elementoEditando.firstChild.textContent = newVal;
-  elementoEditando.dataset.valor = newVal;
-  editLS(seccionActiva, valorEditando, newVal);
-
-  const badgeId = seccionActiva === 'comprasRecurrentes1' ? 'badge1' : 'badge2';
-  updateBadge(seccionActiva, badgeId);
-
-  closeModal('modalEditar');
-  toast('Producto actualizado');
-  elementoEditando = null; valorEditando = '';
-});
-
-document.getElementById('eliminarEdicion').addEventListener('click', () => {
-  if (!elementoEditando) { closeModal('modalEditar'); return; }
-
-  const wrap = elementoEditando.parentNode;
-  elementoEditando.remove();
-  removeLS(seccionActiva, valorEditando);
-
-  if (wrap && wrap.querySelectorAll('.chip').length === 0) {
-    const em = document.createElement('span');
-    em.className = 'items-empty';
-    em.textContent = 'Sin productos guardados';
-    wrap.appendChild(em);
-  }
-
-  const badgeId = seccionActiva === 'comprasRecurrentes1' ? 'badge1' : 'badge2';
-  updateBadge(seccionActiva, badgeId);
-  closeModal('modalEditar');
-  toast('Producto eliminado');
-  elementoEditando = null; valorEditando = '';
-});
-
-document.getElementById('inputEditar').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('guardarEdicion').click();
-});
-
-/* ── SHOPPING LIST ─────────────────────── */
-function saveList() {
-  const items = [...document.querySelectorAll('#listaCompl .list-item')].map(el => ({
-    nombre: el.dataset.valor,
-    done: el.classList.contains('done')
-  }));
-  setLS('listaCompleta', items);
-  updateProgress();
-}
-
-function createListItem(valor, done = false) {
-  const el = document.createElement('div');
-  el.className = 'list-item' + (done ? ' done' : '');
-  el.dataset.valor = valor;
-
-  el.innerHTML = `
-    <div class="item-check"><span class="check-tick">✓</span></div>
-    <span class="item-name">${valor}</span>
-    <button class="item-del" aria-label="Eliminar">✕</button>
-  `;
-
-  el.querySelector('.item-check').addEventListener('click', () => {
-    el.classList.toggle('done');
-    saveList();
-  });
-
-  el.querySelector('.item-del').addEventListener('click', () => removeListItem(el));
-
-  // Swipe left to delete
-  let sx = 0, dragging = false;
-  el.addEventListener('touchstart', e => {
-    sx = e.touches[0].clientX; dragging = false;
-  }, { passive: true });
-
-  el.addEventListener('touchmove', e => {
-    const dx = e.touches[0].clientX - sx;
-    if (Math.abs(dx) > 10) dragging = true;
-    if (dx < 0 && dragging) {
-      const c = Math.max(dx, -88);
-      el.style.transform = `translateX(${c}px)`;
-      el.classList.toggle('swiping', c < -30);
-    }
-  }, { passive: true });
-
-  el.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    if (dx < -72 && dragging) {
-      removeListItem(el);
-    } else {
-      el.style.transition = 'transform 0.2s ease';
-      el.style.transform = '';
-      el.classList.remove('swiping');
-      setTimeout(() => { el.style.transition = ''; }, 200);
-    }
-  }, { passive: true });
-
-  return el;
-}
-
-function removeListItem(el) {
-  el.classList.add('removing');
-  setTimeout(() => {
-    el.remove();
-    const remaining = document.querySelectorAll('#listaCompl .list-item').length;
-    if (remaining === 0) {
-      document.getElementById('emptyState').style.display = 'flex';
-    }
-    saveList();
-  }, 200);
-}
-
-function agregarALista(valor, guardar = true, done = false) {
-  const lista = document.getElementById('listaCompl');
-  const empty = document.getElementById('emptyState');
-
-  // Duplicate check
-  const dup = [...lista.querySelectorAll('.list-item')].find(
-    el => el.dataset.valor?.toLowerCase().trim() === valor.toLowerCase().trim()
-  );
-  if (dup) { toast(`"${valor}" ya está en la lista`); return; }
-
-  if (empty) empty.style.display = 'none';
-  const item = createListItem(valor, done);
-  lista.appendChild(item);
-
-  if (guardar) saveList();
-  else updateProgress();
-}
-
-function loadList() {
-  const items = getLS('listaCompleta');
-  if (items.length > 0) document.getElementById('emptyState').style.display = 'none';
-  items.forEach(({ nombre, done }) => agregarALista(nombre, false, done));
-  updateProgress();
-}
-
-// Add from bar
-document.getElementById('btnagrmasinpt').addEventListener('click', () => {
-  const inp = document.getElementById('inptagrmas');
-  const val = inp.value.trim();
-  if (!val) return;
-  agregarALista(val);
-  inp.value = '';
-  toast(`"${val}" añadido`);
-});
-
-document.getElementById('inptagrmas').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('btnagrmasinpt').click();
-});
-
-/* ── CLEAR LIST ────────────────────────── */
-document.getElementById('btnClear').addEventListener('click', () => openModal('modalConfirm'));
-document.getElementById('cancelClear').addEventListener('click', () => closeModal('modalConfirm'));
-
-document.getElementById('confirmClear').addEventListener('click', () => {
-  document.querySelectorAll('#listaCompl .list-item').forEach(el => el.remove());
-  localStorage.removeItem('listaCompleta');
-  document.getElementById('emptyState').style.display = 'flex';
-  updateProgress();
-  closeModal('modalConfirm');
-  toast('Lista terminada 🎉');
-});
-
-/* ── COPY LIST ─────────────────────────── */
-document.getElementById('btnCopy').addEventListener('click', () => {
-  const items = [...document.querySelectorAll('#listaCompl .list-item')];
-  if (!items.length) { toast('La lista está vacía'); return; }
-
-  const text = '🛒 Lista del super\n\n' +
-    items.map(el =>
-      (el.classList.contains('done') ? '✓ ' : '☐ ') + el.dataset.valor
-    ).join('\n');
-
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text)
-      .then(() => toast('Lista copiada 📋'))
-      .catch(() => fallbackCopy(text));
-  } else {
-    fallbackCopy(text);
-  }
-});
-
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try { document.execCommand('copy'); toast('Lista copiada 📋'); }
-  catch { toast('No se pudo copiar'); }
-  ta.remove();
-}
-
-/* ── CLOSE MODALS ON BACKDROP ──────────── */
-['modalAgregar','modalEditar','modalConfirm'].forEach(id => {
-  document.getElementById(id).addEventListener('click', e => {
-    if (e.target.id === id) closeModal(id);
-  });
-});
-
-/* ── INIT ──────────────────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
-  setupAccordion('acc1');
-  setupAccordion('acc2');
-  loadSaved('comprasRecurrentes1', 'articulos1', 'badge1');
-  loadSaved('comprasRecurrentes2', 'articulos2', 'badge2');
-  loadList();
-});
-</script>
+<script src="js.js"></script>
 </body>
 </html>
