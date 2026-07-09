@@ -1,24 +1,48 @@
-const CACHE_NAME = "marketlist-v2";
-const URLS = ["/index.html", "/sw.js"];
+/* ══════════════════════════════════════════
+   MarketList — sw.js (Service Worker)
+   ══════════════════════════════════════════ */
 
-self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(URLS))
+const CACHE_NAME = 'marketlist-v3';
+const URLS_TO_CACHE = [
+  '/index.html',
+  '/style.css',
+  '/js.js',
+  '/sw.js'
+];
+
+// Instalación: cachear archivos esenciales
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return Promise.all(
+        URLS_TO_CACHE.map(url =>
+          cache.add(url).catch(err => console.warn(`No se pudo cachear ${url}:`, err))
+        )
+      );
+    })
   );
-  self.skipWaiting();
+  self.skipWaiting(); // Activar inmediatamente sin esperar
 });
 
-self.addEventListener("activate", e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+// Activación: limpiar caches viejos
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
     )
   );
-  self.clients.claim();
+  self.clients.claim(); // Tomar control de todas las pestañas abiertas
 });
 
-self.addEventListener("fetch", e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request)).catch(() => caches.match("/index.html"))
+// Fetch: responder desde caché, con red como fallback
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request).catch(() => caches.match('/index.html'));
+    })
   );
 });
