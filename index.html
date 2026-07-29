@@ -12,10 +12,10 @@
 <body>
 <div class="app">
 
-  <!-- ── Toast ── -->
+  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <!-- ── Drawer (menú hamburguesa) ── -->
+  <!-- ══ DRAWER ══ -->
   <div class="drawer-overlay" id="drawerOverlay">
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
     <nav class="drawer" id="drawer">
@@ -27,9 +27,7 @@
           </svg>
         </button>
       </div>
-      <div class="drawer-lists" id="drawerLists">
-        <!-- Generado por JS -->
-      </div>
+      <div class="drawer-lists" id="drawerLists"></div>
       <div class="drawer-footer">
         <button class="btn-create-list" id="btnCreateList">
           <span class="create-plus">+</span>
@@ -39,7 +37,7 @@
     </nav>
   </div>
 
-  <!-- ── Header ── -->
+  <!-- ══ HEADER ══ -->
   <header class="header">
     <button class="btn-hamburger" id="btnHamburger" aria-label="Abrir menú">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -53,15 +51,14 @@
     <span class="header-date" id="headerDate"></span>
   </header>
 
-  <!-- ── Main ── -->
+  <!-- ══ MAIN ══ -->
   <main class="main">
 
-    <!-- Sección productos guardados (solo lista predeterminada) -->
+    <!-- Productos guardados (solo lista predeterminada) -->
     <div class="saved-section" id="savedSection">
       <div class="slabel">Mis productos</div>
       <div class="accordions">
 
-        <!-- Accordion Recurrentes -->
         <div class="accordion" id="acc1">
           <button class="acc-btn" aria-expanded="false">
             <span class="acc-emoji">🔄</span>
@@ -84,7 +81,6 @@
           </div>
         </div>
 
-        <!-- Accordion Variables -->
         <div class="accordion" id="acc2">
           <button class="acc-btn" aria-expanded="false">
             <span class="acc-emoji">🔀</span>
@@ -112,7 +108,7 @@
 
     <div class="divider" id="mainDivider"></div>
 
-    <!-- ── Lista de compras ── -->
+    <!-- ══ Lista de compras ══ -->
     <div class="list-section">
 
       <div class="list-top">
@@ -137,7 +133,7 @@
         </div>
       </div>
 
-      <!-- Barra de progreso -->
+      <!-- Progreso -->
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
       </div>
@@ -151,6 +147,17 @@
         </div>
       </div>
 
+      <!-- Hint de edición (listas personalizadas) -->
+      <p class="edit-hint" id="editHint">Toca un elemento para editarlo · Desliza para eliminar</p>
+
+      <!-- Selector de etiqueta (listas personalizadas) -->
+      <div class="tag-strip" id="tagStrip">
+        <span class="tag-strip-label">Etiqueta</span>
+        <button class="tag-btn active" data-tag="">Sin etiqueta</button>
+        <button class="tag-btn tag-importante" data-tag="importante">⭐ Importante</button>
+        <button class="tag-btn tag-urgente" data-tag="urgente">🔴 Urgente</button>
+      </div>
+
       <!-- Input añadir -->
       <div class="add-bar">
         <input type="text" id="inptagrmas" class="add-input"
@@ -162,15 +169,14 @@
     </div>
   </main>
 
-  <!-- ══════════════ MODALS ══════════════ -->
+  <!-- ══════════ MODALS ══════════ -->
 
-  <!-- Modal: añadir producto guardado -->
+  <!-- Añadir producto guardado -->
   <div class="modal-overlay" id="modalAgregar">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Añadir producto</div>
-      <input type="text" class="modal-input" id="inputAgregar"
-        placeholder="Nombre del producto" autocomplete="off">
+      <input type="text" class="modal-input" id="inputAgregar" placeholder="Nombre del producto" autocomplete="off">
       <div class="modal-actions">
         <button class="btn-m secondary" id="cancelAgregar">Cancelar</button>
         <button class="btn-m primary"   id="guardarElem">Guardar</button>
@@ -178,13 +184,12 @@
     </div>
   </div>
 
-  <!-- Modal: editar producto guardado -->
+  <!-- Editar producto guardado -->
   <div class="modal-overlay" id="modalEditar">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Editar producto</div>
-      <input type="text" class="modal-input" id="inputEditar"
-        placeholder="Nombre del producto" autocomplete="off">
+      <input type="text" class="modal-input" id="inputEditar" placeholder="Nombre del producto" autocomplete="off">
       <div class="modal-actions">
         <button class="btn-m danger"  id="eliminarEdicion">Eliminar</button>
         <button class="btn-m primary" id="guardarEdicion">Guardar</button>
@@ -192,7 +197,24 @@
     </div>
   </div>
 
-  <!-- Modal: confirmar limpiar lista -->
+  <!-- Editar item de lista personalizada -->
+  <div class="modal-overlay" id="modalEditItem">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Editar elemento</div>
+      <input type="text" class="modal-input" id="inputEditItem" placeholder="Nombre del elemento" autocomplete="off">
+      <div class="tag-selector-wrap">
+        <div class="tag-selector-label">Etiqueta</div>
+        <div class="tag-selector-row" id="tagSelectorRow"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-m danger"  id="deleteEditItem">Eliminar</button>
+        <button class="btn-m primary" id="saveEditItem">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmar limpiar lista -->
   <div class="modal-overlay" id="modalConfirm">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
@@ -206,16 +228,13 @@
     </div>
   </div>
 
-  <!-- Modal: crear nueva lista -->
+  <!-- Crear nueva lista -->
   <div class="modal-overlay" id="modalCreateList">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Nueva lista</div>
-      <div class="emoji-picker" id="emojiPicker">
-        <!-- Generado por JS -->
-      </div>
-      <input type="text" class="modal-input" id="inputListName"
-        placeholder="Nombre de la lista" autocomplete="off">
+      <div class="emoji-picker" id="emojiPicker"></div>
+      <input type="text" class="modal-input" id="inputListName" placeholder="Nombre de la lista" autocomplete="off">
       <div class="modal-actions">
         <button class="btn-m secondary" id="cancelCreateList">Cancelar</button>
         <button class="btn-m primary"   id="confirmCreateList">Crear</button>
@@ -223,7 +242,7 @@
     </div>
   </div>
 
-  <!-- Modal: confirmar eliminar lista -->
+  <!-- Confirmar eliminar lista -->
   <div class="modal-overlay" id="modalDeleteList">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
@@ -237,8 +256,7 @@
     </div>
   </div>
 
-</div><!-- /app -->
-
+</div>
 <script src="js.js"></script>
 </body>
 </html>
